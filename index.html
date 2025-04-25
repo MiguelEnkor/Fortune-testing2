@@ -12,69 +12,114 @@
       padding: 20px;
       border: 1px solid #ccc;
       border-radius: 12px;
-      width: 300px;
+      width: 320px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     h2 {
       font-size: 18px;
+      margin-bottom: 5px;
+    }
+    h4 {
+      font-size: 14px;
+      margin-top: 0;
       margin-bottom: 10px;
+      color: #666;
     }
-    select, button {
-      margin-top: 10px;
-      width: 100%;
-      padding: 8px;
-      font-size: 14px;
-    }
-    #horoscope-result {
-      margin-top: 15px;
-      font-size: 14px;
-      background: #fff;
+    .fortune-box {
+      margin-bottom: 12px;
       padding: 10px;
+      background: #fff;
       border-radius: 8px;
       border: 1px solid #ddd;
+    }
+    .fortune-box h3 {
+      margin: 0 0 5px 0;
+      font-size: 16px;
+    }
+    .fortune-box p {
+      margin: 0;
+      font-size: 14px;
+    }
+    .fortune-image {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin-bottom: 8px;
     }
   </style>
 </head>
 <body>
-  <h2>🐲 Today's Zodiac Fortune</h2>
-  <label for="zodiac">Select your Zodiac Animal:</label>
-  <select id="zodiac" onchange="getZodiacFortune()">
-    <option value="rat">Rat (쥐)</option>
-    <option value="ox">Ox (소)</option>
-    <option value="tiger">Tiger (호랑이)</option>
-    <option value="rabbit">Rabbit (토끼)</option>
-    <option value="dragon">Dragon (용)</option>
-    <option value="snake">Snake (뱀)</option>
-    <option value="horse">Horse (말)</option>
-    <option value="goat">Goat (양)</option>
-    <option value="monkey">Monkey (원숭이)</option>
-    <option value="rooster">Rooster (닭)</option>
-    <option value="dog">Dog (개)</option>
-    <option value="pig">Pig (돼지)</option>
-  </select>
-  <button onclick="getZodiacFortune()">Get Fortune</button>
-
-  <div id="horoscope-result">Your zodiac fortune will appear here.</div>
+  <h2 id="date-heading">🐲 YYYY년 M월 D일 띠별 운세</h2>
+  <h4>Today's Zodiac Fortunes</h4>
+  <div id="all-fortunes"></div>
 
   <script>
-    function getZodiacFortune() {
-      const zodiac = document.getElementById("zodiac").value;
-      const fortunes = {
-        rat: "Today is a good day to organize your thoughts and set new goals.",
-        ox: "Hard work will bring you quiet rewards today.",
-        tiger: "Be bold—your confidence will inspire others.",
-        rabbit: "Take time to rest and reconnect with someone close.",
-        dragon: "Expect positive news regarding your personal projects.",
-        snake: "Trust your instincts in conversations today.",
-        horse: "You may feel energized—channel it into something creative!",
-        goat: "Cooperation is key. Team efforts will go smoothly.",
-        monkey: "Your humor will brighten someone’s day.",
-        rooster: "Pay attention to detail—it will save you time later.",
-        dog: "A friend might need your advice today. Be generous.",
-        pig: "Comfort and simplicity bring unexpected joy."
-      };
-      document.getElementById("horoscope-result").innerText = fortunes[zodiac];
-    }
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    document.getElementById("date-heading").textContent = `🐲 ${year}년 ${month}월 ${day}일 띠별 운세`;
+
+    const fortunes = {
+      rat: ["Plan carefully today.", "Your charm will open doors.", "Stay patient."],
+      ox: ["Hard work pays off.", "Stay grounded.", "Slow and steady wins."],
+      tiger: ["Be bold.", "Take action.", "Trust your instincts."],
+      rabbit: ["Listen quietly.", "Gentle energy brings peace.", "Softness wins today."],
+      dragon: ["Lead with courage.", "Your fire inspires.", "Go all in."],
+      snake: ["Think deeply.", "Observe more.", "Wisdom is power."],
+      horse: ["Run with passion.", "Energy flows freely.", "Let ideas gallop."],
+      goat: ["Be kind.", "Your care matters.", "Help quietly.", "Speak gently."],
+      monkey: ["Laugh loud.", "Be clever.", "Surprise someone nicely."],
+      rooster: ["Focus on details.", "Plan ahead.", "Precision brings success."],
+      dog: ["Be loyal.", "Support others.", "Stay honest."],
+      pig: ["Enjoy comforts.", "Share food.", "Smile often."]
+    };
+
+    const names = {
+      rat: "Rat (쥐)", ox: "Ox (소)", tiger: "Tiger (호랑이)", rabbit: "Rabbit (토끼)",
+      dragon: "Dragon (용)", snake: "Snake (뱀)", horse: "Horse (말)", goat: "Goat (양)",
+      monkey: "Monkey (원숭이)", rooster: "Rooster (닭)", dog: "Dog (개)", pig: "Pig (돼지)"
+    };
+
+    const images = {
+      rat: "https://i.imgur.com/StglB2i.png",
+      ox: "https://i.imgur.com/Ob6a2oe.png",
+      tiger: "https://i.imgur.com/Hx4ubGL.png",
+      rabbit: "https://i.imgur.com/F4RXinh.png",
+      dragon: "https://i.imgur.com/wdLYXiX.png",
+      snake: "https://i.imgur.com/25tw1j7.png",
+      horse: "https://i.imgur.com/56hrHoO.png",
+      goat: "https://i.imgur.com/BKcJRnz.png",
+      monkey: "https://i.imgur.com/1tFQEM6.png",
+      rooster: "https://i.imgur.com/BW75NNG.png",
+      dog: "https://i.imgur.com/6fj1lYm.png",
+      pig: "https://i.imgur.com/3ZISm3K.png"
+    };
+
+    const container = document.getElementById("all-fortunes");
+
+    Object.keys(fortunes).forEach(key => {
+      const box = document.createElement("div");
+      box.className = "fortune-box";
+
+      const img = document.createElement("img");
+      img.className = "fortune-image";
+      img.src = images[key];
+      img.alt = names[key];
+      box.appendChild(img);
+
+      const title = document.createElement("h3");
+      title.textContent = names[key];
+      box.appendChild(title);
+
+      const para = document.createElement("p");
+      const todayKey = year * 10000 + month * 100 + day;
+      const index = todayKey % fortunes[key].length;
+      para.textContent = fortunes[key][index];
+      box.appendChild(para);
+
+      container.appendChild(box);
+    });
   </script>
 </body>
 </html>
