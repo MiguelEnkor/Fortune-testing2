@@ -12,28 +12,38 @@
       padding: 20px;
       border: 1px solid #ccc;
       border-radius: 12px;
-      width: 320px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 1000px;
+      margin: 0 auto;
     }
     h2 {
       font-size: 18px;
       margin-bottom: 5px;
+      text-align: center;
     }
     h4 {
       font-size: 14px;
       margin-top: 0;
       margin-bottom: 10px;
       color: #666;
+      text-align: center;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
     }
     .fortune-box {
-      margin-bottom: 12px;
       padding: 10px;
       background: #fff;
       border-radius: 8px;
       border: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
     .fortune-box h3 {
-      margin: 0 0 5px 0;
+      margin: 8px 0 6px;
       font-size: 16px;
     }
     .fortune-box p {
@@ -42,16 +52,16 @@
     }
     .fortune-image {
       width: 100%;
+      max-width: 100px;
       height: auto;
       border-radius: 6px;
-      margin-bottom: 8px;
     }
   </style>
 </head>
 <body>
   <h2 id="date-heading">🐲 YYYY년 M월 D일 띠별 운세</h2>
   <h4>Today's Zodiac Fortunes</h4>
-  <div id="all-fortunes"></div>
+  <div class="grid" id="all-fortunes"></div>
 
   <script>
     const today = new Date();
@@ -60,20 +70,15 @@
     const day = today.getDate();
     document.getElementById("date-heading").textContent = `🐲 ${year}년 ${month}월 ${day}일 띠별 운세`;
 
-    const fortunes = {
-      rat: ["Plan carefully today.", "Your charm will open doors.", "Stay patient."],
-      ox: ["Hard work pays off.", "Stay grounded.", "Slow and steady wins."],
-      tiger: ["Be bold.", "Take action.", "Trust your instincts."],
-      rabbit: ["Listen quietly.", "Gentle energy brings peace.", "Softness wins today."],
-      dragon: ["Lead with courage.", "Your fire inspires.", "Go all in."],
-      snake: ["Think deeply.", "Observe more.", "Wisdom is power."],
-      horse: ["Run with passion.", "Energy flows freely.", "Let ideas gallop."],
-      goat: ["Be kind.", "Your care matters.", "Help quietly.", "Speak gently."],
-      monkey: ["Laugh loud.", "Be clever.", "Surprise someone nicely."],
-      rooster: ["Focus on details.", "Plan ahead.", "Precision brings success."],
-      dog: ["Be loyal.", "Support others.", "Stay honest."],
-      pig: ["Enjoy comforts.", "Share food.", "Smile often."]
-    };
+    const signs = [
+      "rat", "ox", "tiger", "rabbit", "dragon", "snake",
+      "horse", "goat", "monkey", "rooster", "dog", "pig"
+    ];
+
+    const fortunes = {};
+    signs.forEach(sign => {
+      fortunes[sign] = Array.from({ length: 12 }, (_, i) => `Today as a ${sign}, I feel message ${i + 1}.`);
+    });
 
     const names = {
       rat: "Rat (쥐)", ox: "Ox (소)", tiger: "Tiger (호랑이)", rabbit: "Rabbit (토끼)",
@@ -98,7 +103,7 @@
 
     const container = document.getElementById("all-fortunes");
 
-    Object.keys(fortunes).forEach(key => {
+    signs.forEach(key => {
       const box = document.createElement("div");
       box.className = "fortune-box";
 
@@ -123,3 +128,4 @@
   </script>
 </body>
 </html>
+
